@@ -8,9 +8,23 @@ import java.util.Objects;
 @Entity
 public class DetailedProductCategory {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Type(type="uuid-char")
+    @Column(insertable = false, updatable = false, nullable = false)
     private String id;
+    @OneToOne
+    @JoinColumn(name = "product_category_set_id")
+    private ProductCategorySet productCategorySet;
     private String categoryName;
     private double charge;
+
+    public ProductCategorySet getProductCategorySet() {
+        return productCategorySet;
+    }
+
+    public void setProductCategorySet(ProductCategorySet productCategorySet) {
+        this.productCategorySet = productCategorySet;
+    }
 
     public DetailedProductCategory() {}
 

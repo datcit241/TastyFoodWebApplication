@@ -17,8 +17,6 @@ public class TastyFoodWebApplication implements CommandLineRunner {
 	@Autowired
 	UserService userService;
 	@Autowired
-	CartService cartService;
-	@Autowired
 	UserRepository userRepository;
 	@Autowired
 	CartRepository cartRepository;
