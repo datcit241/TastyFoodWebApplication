@@ -6,18 +6,16 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-public class ProductCategory {
+public class DetailedProductCategory {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Type(type="uuid-char")
-    @Column(insertable = false, updatable = false, nullable = false)
     private String id;
     private String categoryName;
     private double charge;
 
-    public ProductCategory() {}
+    public DetailedProductCategory() {}
 
-    public ProductCategory(String categoryName, double charge) {
+    public DetailedProductCategory(String id, String categoryName, double charge) {
+        this.id = id;
         this.categoryName = categoryName;
         this.charge = charge;
     }
@@ -34,7 +32,7 @@ public class ProductCategory {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductCategory that = (ProductCategory) o;
+        DetailedProductCategory that = (DetailedProductCategory) o;
         return Objects.equals(id, that.id);
     }
 

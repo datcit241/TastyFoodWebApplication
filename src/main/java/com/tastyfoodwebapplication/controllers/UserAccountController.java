@@ -13,17 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UserAccountController {
     @Autowired
     UserService userService;
-
-    public String control() {
-        userService.addUser(new UserBinding("username", "password", "Dat", "A33C", "113"));
-        User user = new UserService().find(anyUser -> anyUser.getUsername().equals("username"));
-        return user.getName();
-    }
-
-//    @RequestMapping(value="/loggin", method= RequestMethod.POST)
-//    public String login(@RequestParam String username, @RequestParam String password) {
-//    }
-
     @RequestMapping(value="/login")
     public String login() {
         return "/index";

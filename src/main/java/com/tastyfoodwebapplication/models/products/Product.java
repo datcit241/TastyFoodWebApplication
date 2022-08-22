@@ -19,7 +19,7 @@ public class Product {
     private double discount;
     private ProductStatus status;
     @OneToMany
-    private List<ProductCategory> productCategories;
+    private List<ProductCategorySet> productCategorySets;
 
     public Product() {}
 
@@ -28,7 +28,7 @@ public class Product {
         this.price = price;
         this.discount = 0d;
         this.status = ProductStatus.Available;
-        this.productCategories = new ArrayList<>();
+        this.productCategorySets = new ArrayList<>();
     }
 
     public String getId() { return id; }
@@ -45,8 +45,8 @@ public class Product {
     public ProductStatus getStatus() { return status; }
     public void setStatus(ProductStatus status) { this.status = status; }
 
-    public void addCategory(ProductCategory category) { productCategories.add(category); }
-    public void removeCategory(ProductCategory category) { productCategories.remove(category); }
+    public List<ProductCategorySet> getProductCategorySets() { return productCategorySets; }
+    public void setProductCategorySets(List<ProductCategorySet> productCategorySets) { this.productCategorySets = productCategorySets; }
 
     @Override
     public boolean equals(Object o) {

@@ -1,7 +1,7 @@
 package com.tastyfoodwebapplication.models;
 
 import com.tastyfoodwebapplication.models.products.Product;
-import com.tastyfoodwebapplication.models.products.ProductCategory;
+import com.tastyfoodwebapplication.models.products.DetailedProductCategory;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -19,11 +19,11 @@ public class CartItem {
     private Product product;
     private int quantity;
     @OneToMany
-    private Set<ProductCategory> selectedCategories;
+    private Set<DetailedProductCategory> selectedCategories;
 
     public CartItem() {}
 
-    public CartItem(Product product, int quantity, Set<ProductCategory> productCategoryList) {
+    public CartItem(Product product, int quantity, Set<DetailedProductCategory> productCategoryList) {
         this.product = product;
         this.quantity = quantity;
         this.selectedCategories = productCategoryList;
@@ -37,8 +37,8 @@ public class CartItem {
     public void setQuantity(int quantity) { this.quantity = quantity; }
     public void incrementQuantity() { this.quantity++; }
 
-    public Set<ProductCategory> getSelectedCategories() { return selectedCategories; }
-    public void setSelectedCategories(Set<ProductCategory> productCategoryList) { this.selectedCategories = productCategoryList; }
+    public Set<DetailedProductCategory> getSelectedCategories() { return selectedCategories; }
+    public void setSelectedCategories(Set<DetailedProductCategory> productCategoryList) { this.selectedCategories = productCategoryList; }
 
     @Override
     public boolean equals(Object o) {

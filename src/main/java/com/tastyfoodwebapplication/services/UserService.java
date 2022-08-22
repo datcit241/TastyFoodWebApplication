@@ -10,21 +10,22 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
-import java.util.function.*;
 
 @Service
 public class UserService {
     private UserRepository userRepository;
     private CartRepository cartRepository;
+    private ProductRepository productRepository;
     private MappingService mappingService;
     private PasswordAuthentication passwordAuthentication;
 
     public UserService() {};
 
     @Autowired
-    public UserService(UserRepository userRepository, CartRepository cartRepository, MappingService mappingService, PasswordAuthentication passwordAuthentication) {
+    public UserService(UserRepository userRepository, CartRepository cartRepository, ProductRepository productRepository, MappingService mappingService, PasswordAuthentication passwordAuthentication) {
         this.userRepository = userRepository;
         this.cartRepository = cartRepository;
+        this.productRepository = productRepository;
         this.mappingService = mappingService;
         this.passwordAuthentication = passwordAuthentication;
     }
@@ -43,7 +44,7 @@ public class UserService {
         return true;
     }
 
-    public boolean addToCart(User user, Product product, Set<ProductCategory> selectedCategories) {
+    public boolean addToCart(User user, Product product, Set<DetailedProductCategory> selectedCategories) {
         if (product.getStatus() != ProductStatus.Available) {
             return false;
         }
