@@ -12,19 +12,8 @@ public class DetailedProductCategory {
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
     private String id;
-    @OneToOne
-    @JoinColumn(name = "product_category_set_id")
-    private ProductCategorySet productCategorySet;
     private String categoryName;
     private double charge;
-
-    public ProductCategorySet getProductCategorySet() {
-        return productCategorySet;
-    }
-
-    public void setProductCategorySet(ProductCategorySet productCategorySet) {
-        this.productCategorySet = productCategorySet;
-    }
 
     public DetailedProductCategory() {}
 

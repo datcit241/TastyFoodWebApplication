@@ -163,11 +163,11 @@
 									</li>
 								</ul>
 
-								<ul class="logout" sec:authorize="isAuthenticated()">
+								<ul class="login" sec:authorize="isAuthenticated()">
 									<li>
 										<fieldset>
 											<form th:action="@{/login}" method="post">
-												<button id="btn-logout" type="submit">Logout</button>
+												<button id="btn-logout" class="btn btn-danger" type="submit">Logout</button>
 											</form>
 										</fieldset>
 									</li>
@@ -516,51 +516,53 @@
 				<p class="sub-title">Special</p>
 				<h2>Menu of the week</h2>
 				<div class="row menu-card-group">
-					<div class="col-md-4 col-6">
+					<div class="col-md-4 col-6" th:each="product : ${products}">
 						<div class="menu-card">
-							<a href="#"><img src="/images/plate1.png" alt="plate" loading="lazy"></a>
+							<a href="#"><img th:src="${product.getImageURL()}" src="/images/plate1.png" alt="plate" loading="lazy"></a>
 							<div class="menu-content">
 								<div class="menu-content-title">
-									<a href="#"><h3>Barbecue salad</h3></a>
+									<a href="#"><h3 th:text="${product.getName()}">Barbecue salad</h3></a>
 								</div>
-								<p>Delicious dish</p>
-								<p class="price">$22.00</p>
+								<p th:text="${product.getDescription()}">Delicious dish</p>
+								<p th:text="${#numbers.formatCurrency(product.getPrice())}" class="price">$22.00</p>
 							</div>
-							<div class="menu-cart">
-								<i class="fas fa-shopping-cart"></i>
-							</div>
+<!--							<a th:href="/cart/add-${product.getId}">-->
+								<div class="menu-cart">
+									<i class="fas fa-shopping-cart"></i>
+								</div>
+<!--							</a>-->
 						</div>
 					</div>
-					<div class="col-md-4 col-6">
-						<div class="menu-card">
-							<a href="#"><img src="/images/plate2.png" alt="plate" loading="lazy"></a>
-							<div class="menu-content">
-								<div class="menu-content-title">
-									<a href="#"><h3>Salad with fish</h3></a>
-								</div>
-								<p>Delicious dish</p>
-								<p class="price">$12.00</p>
-							</div>
-							<div class="menu-cart">
-								<i class="fas fa-shopping-cart"></i>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4 col-6">
-						<div class="menu-card">
-							<a href="#"><img src="/images/plate3.png" alt="plate" loading="lazy"></a>
-							<div class="menu-content">
-								<div class="menu-content-title">
-									<a href="#"><h3>Spinach salad</h3></a>
-								</div>
-								<p>Delicious dish</p>
-								<p class="price">$9.50</p>
-							</div>
-							<div class="menu-cart">
-								<i class="fas fa-shopping-cart"></i>
-							</div>
-						</div>
-					</div>
+<!--					<div class="col-md-4 col-6">-->
+<!--						<div class="menu-card">-->
+<!--							<a href="#"><img src="/images/plate2.png" alt="plate" loading="lazy"></a>-->
+<!--							<div class="menu-content">-->
+<!--								<div class="menu-content-title">-->
+<!--									<a href="#"><h3>Salad with fish</h3></a>-->
+<!--								</div>-->
+<!--								<p>Delicious dish</p>-->
+<!--								<p class="price">$12.00</p>-->
+<!--							</div>-->
+<!--							<div class="menu-cart">-->
+<!--								<i class="fas fa-shopping-cart"></i>-->
+<!--							</div>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--					<div class="col-md-4 col-6">-->
+<!--						<div class="menu-card">-->
+<!--							<a href="#"><img src="/images/plate3.png" alt="plate" loading="lazy"></a>-->
+<!--							<div class="menu-content">-->
+<!--								<div class="menu-content-title">-->
+<!--									<a href="#"><h3>Spinach salad</h3></a>-->
+<!--								</div>-->
+<!--								<p>Delicious dish</p>-->
+<!--								<p class="price">$9.50</p>-->
+<!--							</div>-->
+<!--							<div class="menu-cart">-->
+<!--								<i class="fas fa-shopping-cart"></i>-->
+<!--							</div>-->
+<!--						</div>-->
+<!--					</div>-->
 				</div>
 			</div>
 		</section>

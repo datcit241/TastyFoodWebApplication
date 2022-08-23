@@ -1,22 +1,31 @@
 package com.tastyfoodwebapplication.services;
 
-import com.tastyfoodwebapplication.enums.OrderStatus;
+import com.tastyfoodwebapplication.enums.*;
 import com.tastyfoodwebapplication.models.*;
-import com.tastyfoodwebapplication.repositories.OrderRepository;
-import com.tastyfoodwebapplication.utilities.SearchHelper;
-import com.tastyfoodwebapplication.utilities.OrderByRecentnessComparator;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.tastyfoodwebapplication.models.products.*;
+import com.tastyfoodwebapplication.repositories.*;
+import com.tastyfoodwebapplication.utilities.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
 
 @Service
 public class ShopOwnerService {
+    private ProductRepository productRepository;
     private OrderRepository orderRepository;
 
     @Autowired
-    public ShopOwnerService(OrderRepository orderRepository) {
+    public ShopOwnerService(ProductRepository productRepository, OrderRepository orderRepository) {
+        this.productRepository = productRepository;
         this.orderRepository = orderRepository;
+    }
+
+    public ShopOwnerService() {}
+
+    public void addProduct(String name, String description, String imageURL, double price) {
+        Product product = new Product(name, description, imageURL, price);
+        productRepository.save(product);
     }
 
     public void moveToNextStage(String orderId) {

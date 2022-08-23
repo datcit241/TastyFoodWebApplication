@@ -4,6 +4,7 @@ import com.tastyfoodwebapplication.models.User;
 import com.tastyfoodwebapplication.models.bindings.UserBinding;
 import com.tastyfoodwebapplication.repositories.CartRepository;
 import com.tastyfoodwebapplication.repositories.UserRepository;
+import com.tastyfoodwebapplication.services.ShopOwnerService;
 import com.tastyfoodwebapplication.services.UserService;
 import com.tastyfoodwebapplication.utilities.SearchHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +16,19 @@ import java.util.Optional;
 
 @SpringBootApplication
 public class TastyFoodWebApplication implements CommandLineRunner {
+	private ShopOwnerService shopOwnerService;
+	private UserService userService;
+	private UserRepository userRepository;
+	private CartRepository cartRepository;
+
+
 	@Autowired
-	UserService userService;
-	@Autowired
-	UserRepository userRepository;
-	@Autowired
-	CartRepository cartRepository;
+	public TastyFoodWebApplication(ShopOwnerService shopOwnerService, UserService userService, UserRepository userRepository, CartRepository cartRepository) {
+		this.shopOwnerService = shopOwnerService;
+		this.userService = userService;
+		this.userRepository = userRepository;
+		this.cartRepository = cartRepository;
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(TastyFoodWebApplication.class, args);
@@ -35,5 +43,9 @@ public class TastyFoodWebApplication implements CommandLineRunner {
 
 		System.out.println(user.getName());
 		System.out.println(cartRepository.findById(user.getId()).get());
+
+		shopOwnerService.addProduct("Barbecue salad", "Delicious dish", "/images/plate1.png", 22d);
+		shopOwnerService.addProduct("Salad with fish", "Delicious dish", "/images/plate2.png", 12d);
+		shopOwnerService.addProduct("Spinach salad", "Delicious dish", "/images/plate3.png", 9.5d);
 	}
 }
