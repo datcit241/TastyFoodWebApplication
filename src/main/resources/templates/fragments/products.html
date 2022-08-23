@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="products" class="row menu-card-group">
+    <div class="col-md-4 col-6" th:each="product : ${products}">
+        <div class="menu-card">
+            <a href="#"><img th:src="${product.getImageURL()}" src="/images/plate1.png" alt="plate" loading="lazy"></a>
+            <div class="menu-content">
+                <div class="menu-content-title">
+                    <a href="#"><h3 th:text="${product.getName()}">Barbecue salad</h3></a>
+                </div>
+                <p th:text="${product.getDescription()}">Delicious dish</p>
+                <p th:text="${#numbers.formatCurrency(product.getPrice())}" class="price">$22.00</p>
+            </div>
+            <div class="menu-cart">
+                <i class="fas fa-shopping-cart"></i>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
