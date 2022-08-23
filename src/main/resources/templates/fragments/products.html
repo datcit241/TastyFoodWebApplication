@@ -17,9 +17,11 @@
                 <p th:text="${product.getDescription()}">Delicious dish</p>
                 <p th:text="${#numbers.formatCurrency(product.getPrice())}" class="price">$22.00</p>
             </div>
-            <div class="menu-cart">
-                <i class="fas fa-shopping-cart"></i>
-            </div>
+            <a th:href="@{'/cart/add-product/{id}' (id=${product.id})}" sec:authorize="isAuthenticated()">
+                <div class="menu-cart">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+            </a>
         </div>
     </div>
 </div>

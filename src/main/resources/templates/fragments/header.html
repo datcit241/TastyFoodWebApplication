@@ -5,7 +5,7 @@
 <head th:fragment="head">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello Tasty Restaurant</title>
+    <title>Tasty Restaurant</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
 
@@ -124,8 +124,13 @@
                                                     Invalid username or password.
                                                 </div>
                                             </div>
+                                            <div th:if="${param.logout}">
+                                                <div class="alert alert-danger">
+                                                    You have been logged out
+                                                </div>
+                                            </div>
 
-                                            <form th:action="@{/login}" method="post">
+                                            <form th:action="@{/}" method="post">
                                                 <div class="mb-3 row">
                                                     <label for="staticEmail" class="col-sm-4 col-form-label" >User</label>
 
@@ -161,9 +166,11 @@
                                 <ul class="login" sec:authorize="isAuthenticated()">
                                     <li>
                                         <fieldset>
-                                            <form th:action="@{/login}" method="post">
-                                                <button id="btn-logout" class="btn btn-danger" type="submit">Logout</button>
-                                            </form>
+                                            <a th:href="@{/logout}">
+                                                <button id="btn-logout" class="btn btn-danger">Logout</button>
+                                            </a>
+<!--                                            <form th:action="@{/login}" method="post">-->
+<!--                                            </form>-->
                                         </fieldset>
                                     </li>
                                 </ul>

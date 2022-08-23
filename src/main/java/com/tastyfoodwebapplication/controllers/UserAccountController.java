@@ -24,15 +24,20 @@ public class UserAccountController {
         this.productRepository = productRepository;
     }
 
-    @RequestMapping(value = "/login")
+    @RequestMapping(value = "/", method = RequestMethod.POST)
     public String login(Principal principal, Model model) {
+        return "redirect:/";
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String home(Principal principal, Model model) {
         model.addAttribute("products", productRepository.findAll());
         return "/index";
     }
 
-    @RequestMapping(value = "/")
-    public String home() {
-        return "redirect:/login";
-    }
+//    @RequestMapping(value = "/logout")
+//    public String logout() {
+//
+//    }
 
 }

@@ -7,6 +7,8 @@ import com.tastyfoodwebapplication.models.bindings.*;
 import com.tastyfoodwebapplication.models.products.*;
 import com.tastyfoodwebapplication.repositories.*;
 import com.tastyfoodwebapplication.utilities.*;
+import org.slf4j.*;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.*;
@@ -15,6 +17,7 @@ import java.util.*;
 
 @Service
 public class UserService implements UserDetailsService {
+    private Logger logger = LoggerFactory.getLogger(UserService.class);
     private UserRepository userRepository;
     private CartRepository cartRepository;
     private CartItemRepository cartItemRepository;
@@ -55,19 +58,23 @@ public class UserService implements UserDetailsService {
 
         int quantity = 1;
 
-        Cart cart = cartRepository.findById(user.getUsername()).get();
+        System.out.println(user);
+        Cart cart = cartRepository.findById(user.getId()).get();
 
-        CartItem cartItem = new SearchHelper<CartItem>(cart.getCartItems()).find(anyCartItem -> anyCartItem.getProduct().equals(product) && anyCartItem.getSelectedCategories().equals(selectedCategories));
+        CartItem cartItem = new SearchHelper<CartItem>(cart.getCartItems()).find(anyCartItem -> {
+            boolean isTheSameProduct = anyCartItem.getProduct().equals(product);
+            boolean isTheSameCategories = selectedCategories == null && anyCartItem.getSelectedCategories() == null || anyCartItem.getSelectedCategories().equals(selectedCategories);
+            return isTheSameProduct && isTheSameCategories;
+        });
 
         if (cartItem != null) {
             cartItem.incrementQuantity();
         } else {
             cartItem = new CartItem(product, quantity, selectedCategories);
-            cartItemRepository.save(cartItem);
-
             cart.addCartItem(cartItem);
         }
 
+        cartItemRepository.save(cartItem);
         cartRepository.save(cart);
 
         return true;
