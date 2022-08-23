@@ -5,33 +5,26 @@ import com.tastyfoodwebapplication.models.User;
 import com.tastyfoodwebapplication.models.bindings.UserBinding;
 import com.tastyfoodwebapplication.utilities.PasswordAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 
 @Component
 public class MappingService {
     private PasswordAuthentication passwordAuthentication;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public MappingService(PasswordAuthentication passwordAuthentication) { this.passwordAuthentication = passwordAuthentication; }
+    public MappingService(PasswordAuthentication passwordAuthentication, PasswordEncoder passwordEncoder) {
+        this.passwordAuthentication = passwordAuthentication;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public MappingService() {}
 
     public User bindUser(UserBinding userBinding) {
-        String salt;
-        try {
-            salt = passwordAuthentication.getSalt();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchProviderException e) {
-            throw new RuntimeException(e);
-        }
-        String hashedPassword = passwordAuthentication.getSecurePassword(userBinding.getPassword(), salt);
-        User user = new User(userBinding.getUsername(), userBinding.getName(), salt, hashedPassword, userBinding.getAddress(), userBinding.getPhoneNumber(), UserRole.NormalUser);
-
+        String hashedPassword = passwordEncoder.encode(userBinding.getPassword());
+        User user = new User(userBinding.getUsername(), userBinding.getName(), hashedPassword, userBinding.getAddress(), userBinding.getPhoneNumber(), UserRole.NormalUser);
         return user;
     }
 

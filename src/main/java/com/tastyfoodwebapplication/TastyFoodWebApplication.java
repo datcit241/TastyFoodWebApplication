@@ -5,6 +5,7 @@ import com.tastyfoodwebapplication.models.bindings.UserBinding;
 import com.tastyfoodwebapplication.repositories.CartRepository;
 import com.tastyfoodwebapplication.repositories.UserRepository;
 import com.tastyfoodwebapplication.services.UserService;
+import com.tastyfoodwebapplication.utilities.SearchHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -30,10 +31,9 @@ public class TastyFoodWebApplication implements CommandLineRunner {
 		userService.addUser(new UserBinding("username", "password", "Dat", "BD", "113"));
 		System.out.println(userRepository.count());
 
-		Optional<User> user = userRepository.findById("username");
-		User realUser = user.get();
+		User user = new SearchHelper<User>(userRepository.findAll()).find(anyUser -> anyUser.getUsername().equals("username"));
 
-		System.out.println(realUser.getName());
-		System.out.println(cartRepository.findById(realUser.getUsername()).get());
+		System.out.println(user.getName());
+		System.out.println(cartRepository.findById(user.getId()).get());
 	}
 }

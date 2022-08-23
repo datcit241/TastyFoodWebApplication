@@ -1,18 +1,17 @@
 package com.tastyfoodwebapplication.models;
 
-import com.tastyfoodwebapplication.models.products.Product;
-import com.tastyfoodwebapplication.models.products.DetailedProductCategory;
-import org.hibernate.annotations.Type;
+import com.tastyfoodwebapplication.models.products.*;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 import java.util.*;
 
 @Entity
 public class CartItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Type(type="uuid-char")
-    @Column(insertable = false, updatable = false, nullable = false)
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
     private String id;
     @ManyToOne
     @JoinColumn(name = "product_id")

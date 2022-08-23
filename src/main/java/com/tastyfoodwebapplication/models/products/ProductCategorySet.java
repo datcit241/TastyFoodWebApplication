@@ -1,6 +1,6 @@
 package com.tastyfoodwebapplication.models.products;
 
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.*;
 
 import javax.persistence.Entity;
 import javax.persistence.*;
@@ -9,9 +9,8 @@ import java.util.*;
 @Entity
 public class ProductCategorySet {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Type(type="uuid-char")
-    @Column(insertable = false, updatable = false, nullable = false)
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
     private String id;
     private String name;
 

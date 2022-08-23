@@ -1,18 +1,18 @@
 package com.tastyfoodwebapplication.models;
 
-import com.tastyfoodwebapplication.enums.OrderStatus;
-import org.hibernate.annotations.Type;
+import com.tastyfoodwebapplication.enums.*;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.List;
+import javax.persistence.Entity;
+import java.time.*;
+import java.util.*;
 
 @Entity
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Type(type="uuid-char")
-    @Column(insertable = false, updatable = false, nullable = false)
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
     private String id;
     @OneToOne
     @JoinColumn(name = "user_username")
