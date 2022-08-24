@@ -1,5 +1,6 @@
 package com.tastyfoodwebapplication.models;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ public class Cart {
 //    @Type(type="uuid-char")
 //    @Column(insertable = false, updatable = false, nullable = false)
     private String id;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<CartItem> cartItems;
 //    @OneToOne
 //    @MapsId

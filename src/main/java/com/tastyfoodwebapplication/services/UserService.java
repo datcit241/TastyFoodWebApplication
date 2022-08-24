@@ -8,11 +8,14 @@ import com.tastyfoodwebapplication.models.products.*;
 import com.tastyfoodwebapplication.repositories.*;
 import com.tastyfoodwebapplication.utilities.*;
 import org.slf4j.*;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.*;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.*;
 
+import java.security.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -21,6 +24,7 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
     private CartRepository cartRepository;
     private CartItemRepository cartItemRepository;
+    private OrderRepository orderRepository;
     private ProductRepository productRepository;
     private MappingService mappingService;
     private PasswordAuthentication passwordAuthentication;
@@ -28,10 +32,11 @@ public class UserService implements UserDetailsService {
     public UserService() {};
 
     @Autowired
-    public UserService(UserRepository userRepository, CartRepository cartRepository, CartItemRepository cartItemRepository, ProductRepository productRepository, MappingService mappingService, PasswordAuthentication passwordAuthentication) {
+    public UserService(UserRepository userRepository, CartRepository cartRepository, CartItemRepository cartItemRepository, OrderRepository orderRepository, ProductRepository productRepository, MappingService mappingService, PasswordAuthentication passwordAuthentication) {
         this.userRepository = userRepository;
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
+        this.orderRepository = orderRepository;
         this.productRepository = productRepository;
         this.mappingService = mappingService;
         this.passwordAuthentication = passwordAuthentication;
@@ -51,6 +56,10 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
+    public Cart getCart(User user) {
+        return user == null ? null : cartRepository.findById(user.getId()).get();
+    }
+
     public boolean addToCart(User user, Product product, Set<DetailedProductCategory> selectedCategories) {
         if (product.getStatus() != ProductStatus.Available) {
             return false;
@@ -58,8 +67,7 @@ public class UserService implements UserDetailsService {
 
         int quantity = 1;
 
-        System.out.println(user);
-        Cart cart = cartRepository.findById(user.getId()).get();
+        Cart cart = getCart(user);
 
         CartItem cartItem = new SearchHelper<CartItem>(cart.getCartItems()).find(anyCartItem -> {
             boolean isTheSameProduct = anyCartItem.getProduct().equals(product);
@@ -74,20 +82,20 @@ public class UserService implements UserDetailsService {
             cart.addCartItem(cartItem);
         }
 
-        cartItemRepository.save(cartItem);
+//        cartItemRepository.save(cartItem);
         cartRepository.save(cart);
 
         return true;
     }
 
     public boolean removeFromCart(User user, String cartItemId) {
-        Cart cart = cartRepository.findById(user.getUsername()).get();
+        Cart cart = getCart(user);
 
         List<CartItem> cartItems = cart.getCartItems();
         int size = cartItems.size();
 
         CartItem cartItem = new SearchHelper<CartItem>(cartItems).find(anyCartItem -> anyCartItem.getId().equals(cartItemId));
-        cartItemRepository.delete(cartItem);;
+//        cartItemRepository.delete(cartItem);;
 
         cart.removeCartItem(cartItem);
         cartRepository.save(cart);
@@ -95,6 +103,41 @@ public class UserService implements UserDetailsService {
         return size - 1 == cartItems.size();
     }
 
+    public void order(User user, List<CartItem> cartItems) {
+        Order order = new Order(user, cartItems, LocalDateTime.now());
+
+        Cart cart = getCart(user);
+        cart.getCartItems().removeAll(cartItems);
+
+        cartRepository.save(cart);
+        orderRepository.save(order);
+    }
+
+    public List<Order> getOrders(User user) {
+        return new SearchHelper<Order>(orderRepository.findAll()).get(order -> order.getUser().equals(user), new OrderByRecentnessComparator());
+    }
+
+    public List<Order> getOrdersInProgress(User user) {
+        return new SearchHelper<Order>(orderRepository.findAll()).get(order -> order.getUser().equals(user) && order.getStatus().isInProgress(), new OrderByRecentnessComparator());
+    }
+
+    public User getLoggedInUser(Authentication authentication) {
+        if (authentication.isAuthenticated()) {
+            User user = (User) authentication.getPrincipal();
+            return user;
+        }
+        return null;
+    }
+
+    public UserRole getRole(Principal principal) {
+        if (principal != null) {
+            boolean isUser = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(UserRole.User.toString()));
+            return isUser ? UserRole.User : UserRole.Admin;
+        }
+
+        return null;
+    }
+    
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return new SearchHelper<User>(userRepository.findAll()).find(user -> user.getUsername().equals(username));

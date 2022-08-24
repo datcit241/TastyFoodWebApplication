@@ -1,6 +1,6 @@
 package com.tastyfoodwebapplication.enums;
 
 public enum UserRole {
-    NormalUser,
+    User,
     Admin
 }

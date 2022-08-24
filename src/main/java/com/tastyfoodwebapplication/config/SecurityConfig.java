@@ -1,5 +1,6 @@
 package com.tastyfoodwebapplication.config;
 
+import com.tastyfoodwebapplication.enums.UserRole;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.*;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -26,7 +27,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
             .authorizeRequests()
-                .antMatchers("/", "/registration", "/error", "/h2-console/**").permitAll()
+//                .antMatchers("/", "/registration", "/error", "/h2-console/**").permitAll()
+                .antMatchers("/cart/**").authenticated()
             .anyRequest()
                 .permitAll()
                 .and()

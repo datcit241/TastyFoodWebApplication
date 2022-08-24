@@ -1,10 +1,12 @@
 package com.tastyfoodwebapplication.controllers;
 
+import com.tastyfoodwebapplication.enums.UserRole;
 import com.tastyfoodwebapplication.models.User;
 import com.tastyfoodwebapplication.models.bindings.UserBinding;
 import com.tastyfoodwebapplication.repositories.ProductRepository;
 import com.tastyfoodwebapplication.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +36,7 @@ public class UserAccountController {
         model.addAttribute("products", productRepository.findAll());
         return "/index";
     }
+
 
 //    @RequestMapping(value = "/logout")
 //    public String logout() {

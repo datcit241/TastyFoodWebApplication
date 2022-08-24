@@ -1,5 +1,6 @@
 package com.tastyfoodwebapplication;
 
+import com.tastyfoodwebapplication.enums.UserRole;
 import com.tastyfoodwebapplication.models.User;
 import com.tastyfoodwebapplication.models.bindings.UserBinding;
 import com.tastyfoodwebapplication.repositories.CartRepository;
@@ -37,9 +38,12 @@ public class TastyFoodWebApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		userService.addUser(new UserBinding("username", "password", "Dat", "BD", "113"));
+		userService.addUser(new UserBinding("admin", "admin", "Dat", "BD", "113"));
 		System.out.println(userRepository.count());
 
 		User user = new SearchHelper<User>(userRepository.findAll()).find(anyUser -> anyUser.getUsername().equals("username"));
+		User admin = new SearchHelper<User>(userRepository.findAll()).find(anyUser -> anyUser.getUsername().equals("admin"));
+		admin.setRole(UserRole.Admin);
 
 		System.out.println(user.getName());
 		System.out.println(cartRepository.findById(user.getId()).get());

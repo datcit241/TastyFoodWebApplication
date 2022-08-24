@@ -175,7 +175,15 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li><i class="fas fa-shopping-cart"></i></li>
+                                <li>
+                                    <a th:href="@{/cart}">
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </a>
+<!--                                    <a th:href="@{/cart}" sec:authorize="isAuthenticated()">-->
+<!--                                        <i class="fas fa-shopping-cart"></i>-->
+<!--                                    </a>-->
+<!--                                    <i  sec:authorize="isAnonymous()" class="fas fa-shopping-cart"></i>-->
+                                </li>
                         </ul>
                     </div>
                 </div>

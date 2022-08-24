@@ -24,7 +24,7 @@ public class MappingService {
 
     public User bindUser(UserBinding userBinding) {
         String hashedPassword = passwordEncoder.encode(userBinding.getPassword());
-        User user = new User(userBinding.getUsername(), userBinding.getName(), hashedPassword, userBinding.getAddress(), userBinding.getPhoneNumber(), UserRole.NormalUser);
+        User user = new User(userBinding.getUsername(), userBinding.getName(), hashedPassword, userBinding.getAddress(), userBinding.getPhoneNumber(), UserRole.User);
         return user;
     }
 

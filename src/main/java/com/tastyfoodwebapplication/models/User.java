@@ -3,6 +3,7 @@ package com.tastyfoodwebapplication.models;
 import com.tastyfoodwebapplication.enums.*;
 import org.hibernate.annotations.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -37,14 +38,15 @@ public class User implements UserDetails {
         this.phoneNumber = phoneNumber;
         this.role = role;
         this.status = UserStatus.Active;
-//        this.cart = new Cart();
     }
 
     public String getId() { return id; }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        grantedAuthorities.add(new SimpleGrantedAuthority(role.toString()));
+        return grantedAuthorities;
     }
 
     @Override
@@ -71,7 +73,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return status == UserStatus.Active;
     }
 
     public String getName() { return name; }
