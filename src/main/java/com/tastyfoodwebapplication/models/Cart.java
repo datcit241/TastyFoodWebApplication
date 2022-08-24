@@ -30,6 +30,9 @@ public class Cart {
     public String getId() { return id; }
 
     public List<CartItem> getCartItems() { return this.cartItems; }
+    public void setCartItems(List<CartItem> cartItems) {
+        this.cartItems = cartItems;
+    }
     public void addCartItem(CartItem cartItem) { this.cartItems.add(cartItem); }
     public void removeCartItem(CartItem cartItem) { this.cartItems.remove(cartItem); }
 

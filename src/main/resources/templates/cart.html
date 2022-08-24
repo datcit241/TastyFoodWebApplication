@@ -8,44 +8,84 @@
 <body>
 <div th:replace="/fragments/header :: header"></div>
 
-<div class="container mx-md-5" style="margin-top: 100px">
-    <h3 class="text-success">Products</h3>
-    <div class="">
-        <table id="cartTable">
-            <tbody>
-            <tr th:each="cartItem : ${cartItems}" id="${e.productId}">
-                <td>
-                    <div class="w-50 mx-auto">
-                        <img th:src="${cartItem.product.imageURL}"
-                             style="max-width: 150px" />
-                    </div>
-                </td>
-                <td class="align-middle">
-                    <h3 th:text="${cartItem.product.name}" class="m-0"></h3>
-                </td>
-                <td class="align-middle">
-                    <input th:value="${cartItem.quantity}" type="number" min="1"  class="form-control" aria-describedby="basic-addon1">
-                </td>
-                <td th:text="${#numbers.formatCurrency(cartItem.product.price)}" class="align-middle"><h3 class="m-0"></h3></td>
-                <td class="align-middle">
-                    <a th:href="@{'/cart/delete-item/{id}' (id=${cartItem.id})}">
-                        <i style="cursor:pointer; color: #bb2d3b;" class="fas fa-trash-alt fs-3 ms-2"></i>
-                    </a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+<form th:action="@{/cart/update-cart-items}" th:object="${cart}">
+    <div class="container mx-md-5" style="margin-top: 100px">
+        <h3 class="text-success">Products</h3>
+        <div class="">
+            <table id="cartTable">
+                <tbody>
+                <tr th:each="cartItem, itemStat : ${cart.getCartItems()}" id="${e.productId}">
+                    <td>
+                        <div class="w-50 mx-auto">
+                            <img th:src="${cartItem.product.imageURL}"
+                                 style="max-width: 150px"/>
+                        </div>
+                    </td>
+                    <td class="align-middle">
+                        <h3 th:text="${cartItem.product.name}" class="m-0"></h3>
+                    </td>
+                    <!--                    th:field="*{cartItems[__${itemStat.index}__].id}"-->
+                    <input th:name="|cartItems[${itemStat.index}].id|" th:value="${cartItem.id}">
+                    <td class="align-middle">
+                        <!--                         th:field="*{cartItems[__${itemStat.index}__].quantity}"-->
+                        <input th:value="${cartItem.quantity}" th:name="|cartItems[${itemStat.index}].quantity|"
+                               onchange="calculate(this)" th:class="quantity" th:attr="data-id=${cartItem.id}"
+                               type="number" min="0" class="form-control" aria-describedby="basic-addon1">
+                    </td>
+                    <td th:class="price" th:attr="data-id=${cartItem.id}"
+                        th:text="${#numbers.formatCurrency(cartItem.product.price)}" class="align-middle"><h3
+                            class="m-0"></h3></td>
+                    <td th:class="final-price" th:attr="data-id=${cartItem.id}"
+                        th:text="${#numbers.formatCurrency(cartItem.product.price * cartItem.quantity)}"
+                        style="font-weight: bold;">Total Price will go here
+                    </td>
+                    <!--                    th:text="${#numbers.formatCurrency(cartItem.product.price * cartItem.quantity)}"-->
+                    <td class="align-middle">
+                        <a th:href="@{'/cart/delete-item/{id}' (id=${cartItem.id})}">
+                            <i style="cursor:pointer; color: #bb2d3b;" class="fas fa-trash-alt fs-3 ms-2"></i>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="total-price">Total: $</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex flex-row-reverse mt-5">
+            <a class="btn btn-success ms-2" href="/order/">
+                <span class="fw-bold fs-6">Order</span>
+            </a>
+            <a class="btn btn-success ms-2" href="/home/menu">
+                <span class="fw-bold fs-6">Continue shopping</span>
+            </a>
+            <button class="btn btn-success ms-2" type="submit" th:value="save">Save</button>
+        </div>
     </div>
-    <div class="d-flex flex-row-reverse mt-5">
-        <a class="btn btn-success ms-2" href="/order/">
-            <span class="fw-bold fs-6">Thanh toán</span>
-        </a>
-        <a class="btn btn-success ms-2" href="/home/menu">
-            <span class="fw-bold fs-6"> Tiếp tục mua hàng </span>
-        </a>
-    </div>
-</div>
+</form>
+<script>
+    sum();
 
+    function calculate(e) {
+        let cartItemId = $(e).attr("data-id");
+        let attributeQuery = `[data-id='${cartItemId}']`;
+
+        let quantity = Number.parseInt($(".quantity" + attributeQuery).val());
+        let price = parseFloat(($(".price" + attributeQuery).text()).replace('$', ''));
+
+        $(".final-price" + attributeQuery).text("$" + quantity * price);
+        sum();
+    }
+
+    function sum() {
+        let sum = Array.from($(".final-price").map(function () {
+            return parseFloat($(this).text().replace('$', ''));
+        })).reduce((total, price) => total + price);
+
+        $("#total-price").text("Total: $" + sum);
+    }
+
+</script>
 <div th:replace="/fragments/footer :: footer"></div>
 </body>
 </html>

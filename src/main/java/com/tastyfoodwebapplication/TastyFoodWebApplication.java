@@ -45,8 +45,7 @@ public class TastyFoodWebApplication implements CommandLineRunner {
 		User admin = new SearchHelper<User>(userRepository.findAll()).find(anyUser -> anyUser.getUsername().equals("admin"));
 		admin.setRole(UserRole.Admin);
 
-		System.out.println(user.getName());
-		System.out.println(cartRepository.findById(user.getId()).get());
+		System.out.println(cartRepository.count());
 
 		shopOwnerService.addProduct("Barbecue salad", "Delicious dish", "/images/plate1.png", 22d);
 		shopOwnerService.addProduct("Salad with fish", "Delicious dish", "/images/plate2.png", 12d);
