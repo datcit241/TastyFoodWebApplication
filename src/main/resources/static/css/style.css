@@ -281,7 +281,6 @@ svg {
 	border-bottom-right-radius: 8px;
 }
 .price {
-	font-weight: bold;
 	color: #393939 ;
 }
 .menu-content {
@@ -484,4 +483,8 @@ svg {
 		margin-top: 60px;
 
 	}
+	.cart-item-list td {
+		padding-inline: 20px;
+	}
+
 }

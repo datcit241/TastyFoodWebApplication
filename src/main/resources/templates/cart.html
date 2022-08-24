@@ -4,18 +4,36 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head th:replace="/fragments/header :: head"></head>
+<style>
+    #cartTable {
+        margin-inline: auto;
+    }
+    .cart-item-list td:not(.cart-item-list td.img-container) {
+        padding-inline: 20px;
+    }
+    #total-price {
+        margin-inline: auto;
+        margin-top: 40px;
+        margin-bottom: 25px;
+
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+        color: #157347;
+    }
+</style>
 
 <body>
 <div th:replace="/fragments/header :: header"></div>
 
-<form th:action="@{/cart/update-cart-items}" th:object="${cart}">
+<form class="cart-item-list" th:action="@{/cart/update-cart-items}" th:object="${cart}">
     <div class="container mx-md-5" style="margin-top: 100px">
         <h3 class="text-success">Products</h3>
         <div class="">
             <table id="cartTable">
                 <tbody>
                 <tr th:each="cartItem, itemStat : ${cart.getCartItems()}" id="${e.productId}">
-                    <td>
+                    <td class="img-container">
                         <div class="w-50 mx-auto">
                             <img th:src="${cartItem.product.imageURL}"
                                  style="max-width: 150px"/>
@@ -24,20 +42,21 @@
                     <td class="align-middle">
                         <h3 th:text="${cartItem.product.name}" class="m-0"></h3>
                     </td>
-                    <!--                    th:field="*{cartItems[__${itemStat.index}__].id}"-->
-                    <input th:name="|cartItems[${itemStat.index}].id|" th:value="${cartItem.id}">
                     <td class="align-middle">
+                        <!--                    th:field="*{cartItems[__${itemStat.index}__].id}"-->
+<!--                        <input th:name="|cartItems[${itemStat.index}].id|" th:value="${cartItem.id}">-->
                         <!--                         th:field="*{cartItems[__${itemStat.index}__].quantity}"-->
                         <input th:value="${cartItem.quantity}" th:name="|cartItems[${itemStat.index}].quantity|"
                                onchange="calculate(this)" th:class="quantity" th:attr="data-id=${cartItem.id}"
-                               type="number" min="0" class="form-control" aria-describedby="basic-addon1">
+                               type="number" min="1" class="form-control" aria-describedby="basic-addon1" style="max-width: 100px">
                     </td>
                     <td th:class="price" th:attr="data-id=${cartItem.id}"
-                        th:text="${#numbers.formatCurrency(cartItem.product.price)}" class="align-middle"><h3
-                            class="m-0"></h3></td>
+                        th:text="${#numbers.formatCurrency(cartItem.product.price)}" class="align-middle">
+                        <h3 class="m-0"></h3>
+                    </td>
                     <td th:class="final-price" th:attr="data-id=${cartItem.id}"
                         th:text="${#numbers.formatCurrency(cartItem.product.price * cartItem.quantity)}"
-                        style="font-weight: bold;">Total Price will go here
+                        style="font-weight: bold; color: #157347;">Total Price will go here
                     </td>
                     <!--                    th:text="${#numbers.formatCurrency(cartItem.product.price * cartItem.quantity)}"-->
                     <td class="align-middle">
@@ -46,13 +65,13 @@
                         </a>
                     </td>
                 </tr>
-                <tr>
-                    <td id="total-price">Total: $</td>
-                </tr>
                 </tbody>
             </table>
+<!--            <div class="row">-->
+                <div class="col-md-5 t-2" id="total-price">Total: $</div>
+<!--            </div>-->
         </div>
-        <div class="d-flex flex-row-reverse mt-5">
+        <div class="d-flex flex-row-reverse" style="justify-content: center;">
             <a class="btn btn-success ms-2" href="/order/">
                 <span class="fw-bold fs-6">Order</span>
             </a>
