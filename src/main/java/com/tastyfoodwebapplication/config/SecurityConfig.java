@@ -11,24 +11,18 @@ import org.springframework.security.crypto.password.*;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Value("${spring.admin.username}")
-    private String adminUsername;
+    private AccessDeniedHandlerConfig accessDeniedHandlerConfig;
 
-    @Value("${spring.admin.username}")
-    private String adminPassword;
-
-    @Value("${spring.queries.users-query}")
-    private String usersQuery;
-
-    @Value("${spring.queries.roles-query}")
-    private String rolesQuery;
+    @Autowired
+    public SecurityConfig(AccessDeniedHandlerConfig accessDeniedHandlerConfig) {
+        this.accessDeniedHandlerConfig = accessDeniedHandlerConfig;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
             .authorizeRequests()
-//                .antMatchers("/", "/registration", "/error", "/h2-console/**").permitAll()
-                .antMatchers("/cart/**").authenticated()
+                .antMatchers("/cart/**", "/order/**").authenticated()
             .anyRequest()
                 .permitAll()
                 .and()
@@ -39,18 +33,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
             .logout()
                 .permitAll()
-//                .logoutSuccessUrl("/")
+                .and()
+            .exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandlerConfig)
         ;
-    }
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth
-//                .jdbcAuthentication()
-//                .usersByUsernameQuery(usersQuery)
-//                .authoritiesByUsernameQuery(rolesQuery);
-//        auth.inMemoryAuthentication()
-//                .withUser(adminUsername).password(adminPassword).roles("ADMIN");
     }
 
     @Bean

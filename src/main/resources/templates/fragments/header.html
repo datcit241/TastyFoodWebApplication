@@ -111,7 +111,7 @@
                                 </div>
                             </li>
                             <li class="menu-has-children">
-                                <i class="fas fa-user"></i>
+                                <i class="fas fa-user" style="padding-inline: 20px;"></i>
                                 <ul class="login" sec:authorize="isAnonymous()">
                                     <li>
                                         <fieldset>
@@ -166,17 +166,18 @@
                                 <ul class="login" sec:authorize="isAuthenticated()">
                                     <li>
                                         <fieldset>
+                                            <a th:href="@{/order/order-history}">
+                                                <button id="btn-order-history" class="btn btn-light" style="color: #106a39;">History of orders</button>
+                                            </a>
                                             <a th:href="@{/logout}">
                                                 <button id="btn-logout" class="btn btn-danger">Logout</button>
                                             </a>
-<!--                                            <form th:action="@{/login}" method="post">-->
-<!--                                            </form>-->
                                         </fieldset>
                                     </li>
                                 </ul>
                             </li>
                                 <li>
-                                    <a th:href="@{/cart}">
+                                    <a th:href="@{/cart}" style="font-size: 20px; padding-inline: 0px;">
                                         <i class="fas fa-shopping-cart"></i>
                                     </a>
 <!--                                    <a th:href="@{/cart}" sec:authorize="isAuthenticated()">-->

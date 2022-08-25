@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head th:replace="/fragments/header :: head"></head>
+<style>
+    #cartTable {
+        margin-inline: auto;
+    }
+
+    .cart-item-list td:not(.cart-item-list td.img-container) {
+        padding-inline: 20px;
+    }
+
+    #total-price {
+        margin-inline: auto;
+        margin-top: 15px;
+        margin-bottom: 15px;
+
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+        color: #157347;
+    }
+</style>
+
+<body>
+<div th:replace="/fragments/header :: header"></div>
+
+<form class="cart-item-list" th:action="@{/cart/update-cart-items}" th:object="${orderHistory}">
+    <div class="container mx-md-5" style="margin-top: 100px">
+        <h3 class="text-success">History of orders</h3>
+        <div th:each="order : *{orders}" class="">
+            <div style="padding-left: 150px;">
+                <div th:text="${order.status.toString()}" style="font-size: 20px; color: #157347;"></div>
+                <div th:text="${#temporals.format(order.orderedAt, 'dd-MM-yyyy HH:mm')}"></div>
+            </div>
+            <table id="cartTable">
+                <tbody>
+                <tr th:each="cartItem, itemStat : ${order.cartItems}" id="${e.productId}">
+                    <td class="img-container">
+                        <div class="w-50 mx-auto">
+                            <img th:src="${cartItem.product.imageURL}"
+                                 style="max-width: 150px"/>
+                        </div>
+                    </td>
+                    <td class="align-middle">
+                        <h3 th:text="${cartItem.product.name}" class="m-0"></h3>
+                    </td>
+<!--                    <td class="align-middle">-->
+<!--                        &lt;!&ndash;                                            th:field="*{cartItems[__${itemStat.index}__].id}"&ndash;&gt;-->
+<!--                        <input hidden th:value="${cartItem.id}" th:name="|cartItems[${itemStat.index}].id|" type="text">-->
+<!--                        &lt;!&ndash;                         th:field="*{cartItems[__${itemStat.index}__].quantity}"&ndash;&gt;-->
+<!--                        <input th:value="${cartItem.quantity}" th:name="|cartItems[${itemStat.index}].quantity|"-->
+<!--                               onchange="calculate(this)" th:class="quantity" th:attr="data-id=${cartItem.id}"-->
+<!--                               type="number" min="1" class="form-control" aria-describedby="basic-addon1"-->
+<!--                               style="max-width: 100px">-->
+<!--                    </td>-->
+                    <td th:class="quantity" th:attr="data-id=${cartItem.id}"
+                        th:text="${cartItem.quantity}" class="align-middle">
+                        <h3 class="m-0"></h3>
+                    </td>
+                    <td th:class="price" th:attr="data-id=${cartItem.id}"
+                        th:text="${#numbers.formatCurrency(cartItem.product.price)}" class="align-middle">
+                        <h3 class="m-0"></h3>
+                    </td>
+                    <td th:class="final-price" th:attr="data-id=${cartItem.id}"
+                        th:text="${#numbers.formatCurrency(cartItem.product.price * cartItem.quantity)}"
+                        style="font-weight: bold; color: #157347;">Total Price will go here
+                    </td>
+                    <!--                    th:text="${#numbers.formatCurrency(cartItem.product.price * cartItem.quantity)}"-->
+                </tr>
+                </tbody>
+            </table>
+            <!--            <div class="row">-->
+            <div th:text="${#numbers.formatCurrency(order.totalPrice)}" class="col-md-5 t-2" id="total-price">Total: $</div>
+            <!--            </div>-->
+<!--            <div class="alert alert-danger" th:if="${error} != null" th:text="${error}"></div>-->
+            <div th:if="${order.status.isPending()}" class="d-flex flex-row-reverse" style="justify-content: center;">
+                <a class="btn btn-danger ms-2" th:href="@{'/order/cancel/{orderId}' (orderId=${order.id})}">
+                    <span class="fw-bold fs-6">Cancel order</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
+<div th:replace="/fragments/footer :: footer"></div>
+</body>
+</html>

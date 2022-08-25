@@ -20,4 +20,8 @@ public enum OrderStatus {
         };
     }
 
+    public boolean isPending() {
+        return this == Pending;
+    }
+
 }

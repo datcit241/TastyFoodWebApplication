@@ -44,13 +44,13 @@ public class ShopOwnerService {
 
     public List<CustomerOrder> getOrders() {
         List<CustomerOrder> orders = orderRepository.findAll();
-        orders.sort(new OrderByRecentnessComparator());
+        orders.sort(new DefaultOrderComparator());
 
         return orders;
     }
 
     public List<CustomerOrder> getOrdersInProgress() {
-        List<CustomerOrder> orders = new SearchHelper<CustomerOrder>(orderRepository.findAll()).get(order -> order.getStatus().isInProgress(), new OrderByRecentnessComparator());
+        List<CustomerOrder> orders = new SearchHelper<CustomerOrder>(orderRepository.findAll()).get(order -> order.getStatus().isInProgress(), new DefaultOrderComparator());
         return orders;
     }
 

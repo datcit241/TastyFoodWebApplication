@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head th:replace="/fragments/header :: head"></head>
+
+<body>
+<div th:replace="/fragments/header :: header"></div>
+
+<form class="cart-item-list">
+    <div class="container mx-md-5" style="margin-top: 100px">
+        <h3 class="text-success">Error!</h3>
+        <img src="error.html" alt="">
+        <div class="">
+            <div class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+        </div>
+        <div class="d-flex flex-row-reverse" style="justify-content: center;">
+            <a th:href="@{/}" class="btn btn-success ms-2">
+                <span class="fw-bold fs-6">Back to home</span>
+            </a>
+        </div>
+    </div>
+</form>
+
+<div th:replace="/fragments/footer :: footer"></div>
+</body>
+</html>

@@ -7,6 +7,7 @@ import com.tastyfoodwebapplication.models.bindings.*;
 import com.tastyfoodwebapplication.models.products.*;
 import com.tastyfoodwebapplication.repositories.*;
 import com.tastyfoodwebapplication.utilities.*;
+import org.hibernate.criterion.Order;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.core.*;
@@ -132,6 +133,18 @@ public class UserService implements UserDetailsService {
         Cart cart = cartRepository.findById(user.getId()).get();
         cart.getCartItems().removeAll(cartItems);
         cartRepository.save(cart);
+    }
+
+    public boolean cancelOrder(User user, String orderId) {
+        CustomerOrder order = orderRepository.findById(orderId).get();
+        if (!order.getStatus().isPending()) {
+            return false;
+        }
+
+        order.setStatus(OrderStatus.Cancelled);
+        orderRepository.save(order);
+
+        return true;
     }
 
     public List<CustomerOrder> getOrders(User user) {

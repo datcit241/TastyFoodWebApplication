@@ -17,30 +17,35 @@ $(document).ready(function(){
     });
 
     $(".home-menu").click(function (){
+        window.location.href = "/";
         $('html, body').animate({
             scrollTop: $(".home").offset().top - 100
         }, 1000);
     });
 
     $(".about-menu").click(function (){
+        window.location.href = "/";
         $('html, body').animate({
             scrollTop: $(".about").offset().top - 100
         }, 1000);
     });
 
     $(".services-menu").click(function (){
+        window.location.href = "/";
         $('html, body').animate({
             scrollTop: $(".services").offset().top - 100
         }, 1000);
     });
 
      $(".dishes-menu").click(function (){
+         window.location.href = "/";
         $('html, body').animate({
             scrollTop: $(".dishes").offset().top - 100
         }, 1000);
     });
 
     $(".contact-menu").click(function (){
+        window.location.href = "/";
         $('html, body').animate({
             scrollTop: $(".contact").offset().top - 100
         }, 1000);
