@@ -9,13 +9,13 @@ import com.tastyfoodwebapplication.repositories.*;
 import com.tastyfoodwebapplication.utilities.*;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.*;
 import org.springframework.security.core.context.*;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.*;
 
 import java.security.*;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.util.*;
 
 @Service
@@ -29,11 +29,12 @@ public class UserService implements UserDetailsService {
     private ProductRepository productRepository;
     private MappingService mappingService;
     private PasswordAuthentication passwordAuthentication;
+    private OrderComparator orderComparator;
 
     public UserService() {};
 
     @Autowired
-    public UserService(UserRepository userRepository, CartRepository cartRepository, CartItemRepository cartItemRepository, OrderHistoryRepository orderHistoryRepository, OrderRepository orderRepository, ProductRepository productRepository, MappingService mappingService, PasswordAuthentication passwordAuthentication) {
+    public UserService(UserRepository userRepository, CartRepository cartRepository, CartItemRepository cartItemRepository, OrderHistoryRepository orderHistoryRepository, OrderRepository orderRepository, ProductRepository productRepository, MappingService mappingService, PasswordAuthentication passwordAuthentication, OrderComparator orderComparator) {
         this.userRepository = userRepository;
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
@@ -42,6 +43,7 @@ public class UserService implements UserDetailsService {
         this.productRepository = productRepository;
         this.mappingService = mappingService;
         this.passwordAuthentication = passwordAuthentication;
+        this.orderComparator = orderComparator;
     }
 
     public boolean addUser(UserBinding userBinding) {
@@ -112,7 +114,7 @@ public class UserService implements UserDetailsService {
         double totalPrice = 0d;
 
         for (CartItem cartItem : cartItems) {
-            totalPrice += cartItem.getQuantity() * (cartItem.getProduct().getPrice() * cartItem.getProduct().getDiscount());
+            totalPrice += cartItem.getQuantity() * (cartItem.getProduct().getPrice() - cartItem.getProduct().getDiscount());
 
             if (cartItem.getSelectedCategories().size() != 0) {
                 for (DetailedProductCategory e : cartItem.getSelectedCategories()) {
@@ -121,23 +123,23 @@ public class UserService implements UserDetailsService {
             }
         }
 
-        Order order = new Order(user, cartItems, totalPrice, LocalDateTime.now());
+        CustomerOrder order = new CustomerOrder(user, new ArrayList<>(cartItems), totalPrice, LocalDateTime.now());
+
         OrderHistory orderHistory = orderHistoryRepository.findById(user.getId()).get();
         orderHistory.addOrder(order);
+        orderHistoryRepository.save(orderHistory);
 
         Cart cart = cartRepository.findById(user.getId()).get();
         cart.getCartItems().removeAll(cartItems);
-
         cartRepository.save(cart);
-        orderHistoryRepository.save(orderHistory);
     }
 
-    public List<Order> getOrders(User user) {
-        return new SearchHelper<Order>(orderRepository.findAll()).get(order -> order.getUser().equals(user), new OrderByRecentnessComparator());
+    public List<CustomerOrder> getOrders(User user) {
+        return new SearchHelper<CustomerOrder>(orderRepository.findAll()).get(order -> order.getUser().equals(user), orderComparator.getDefaultComparator());
     }
 
-    public List<Order> getOrdersInProgress(User user) {
-        return new SearchHelper<Order>(orderRepository.findAll()).get(order -> order.getUser().equals(user) && order.getStatus().isInProgress(), new OrderByRecentnessComparator());
+    public List<CustomerOrder> getOrdersInProgress(User user) {
+        return new SearchHelper<CustomerOrder>(orderRepository.findAll()).get(order -> order.getUser().equals(user) && order.getStatus().isInProgress(), orderComparator.getDefaultComparator());
     }
 
     public User getLoggedInUser(Authentication authentication) {

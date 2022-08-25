@@ -29,28 +29,28 @@ public class ShopOwnerService {
     }
 
     public void moveToNextStage(String orderId) {
-        Order order = orderRepository.findById(orderId).get();
+        CustomerOrder order = orderRepository.findById(orderId).get();
         order.setStatus(OrderStatus.next(order.getStatus()));
 
         orderRepository.save(order);
     }
 
     public void cancelOrder(String orderId) {
-        Order order = orderRepository.findById(orderId).get();
+        CustomerOrder order = orderRepository.findById(orderId).get();
         order.setStatus(OrderStatus.Cancelled);
 
         orderRepository.save(order);
     }
 
-    public List<Order> getOrders() {
-        List<Order> orders = orderRepository.findAll();
+    public List<CustomerOrder> getOrders() {
+        List<CustomerOrder> orders = orderRepository.findAll();
         orders.sort(new OrderByRecentnessComparator());
 
         return orders;
     }
 
-    public List<Order> getOrdersInProgress() {
-        List<Order> orders = new SearchHelper<Order>(orderRepository.findAll()).get(order -> order.getStatus().isInProgress(), new OrderByRecentnessComparator());
+    public List<CustomerOrder> getOrdersInProgress() {
+        List<CustomerOrder> orders = new SearchHelper<CustomerOrder>(orderRepository.findAll()).get(order -> order.getStatus().isInProgress(), new OrderByRecentnessComparator());
         return orders;
     }
 

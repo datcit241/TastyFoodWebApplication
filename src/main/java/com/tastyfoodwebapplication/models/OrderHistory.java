@@ -7,9 +7,9 @@ import java.util.*;
 public class OrderHistory {
     @Id
     private String id;
-//    @OneToMany(cascade = CascadeType.ALL)
-    @OneToMany
-    private List<Order> orders;
+    @OneToMany(cascade = CascadeType.ALL)
+//    @OneToMany
+    private List<CustomerOrder> orders;
 
     public OrderHistory(String id) {
         this.id = id;
@@ -21,7 +21,7 @@ public class OrderHistory {
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
-    public List<Order> getOrders() { return orders; }
-    public void setOrders(List<Order> orders) { this.orders = orders; }
-    public void addOrder(Order order) { this.orders.add(order); }
+    public List<CustomerOrder> getOrders() { return orders; }
+    public void setOrders(List<CustomerOrder> orders) { this.orders = orders; }
+    public void addOrder(CustomerOrder order) { this.orders.add(order); }
 }

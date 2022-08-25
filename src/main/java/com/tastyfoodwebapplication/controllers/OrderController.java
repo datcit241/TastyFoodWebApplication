@@ -25,19 +25,18 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/order/take-order", method = RequestMethod.GET)
-    public String order(@ModelAttribute Cart cart, BindingResult bindingResult, Authentication authentication, Model model) {
+    public String order(Authentication authentication, Model model) {
         User user = userService.getLoggedInUser(authentication);
-
-        List<CartItem> cartItems = cart.getCartItems().stream().map(cartItem -> cartItemRepository.findById(cartItem.getId()).get()).toList();
-
-        if (cart.getCartItems() != null) {
-            userService.takeOrder(user, cartItems);
+        Cart cart = userService.getCart(user);
+        if (cart.getCartItems().size() != 0) {
+            userService.takeOrder(user, cart.getCartItems());
         } else {
             model.addAttribute("error", "Nothing to order");
-            return "/cart";
+            return "redirect:/cart";
         }
 
-        return "redirect:/order/order-history";
+        return "redirect:/";
+//        return "redirect:/order/order-history";
     }
 
     @RequestMapping(value = "/order/order-history")
