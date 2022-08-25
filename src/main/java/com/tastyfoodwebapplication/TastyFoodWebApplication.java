@@ -48,5 +48,7 @@ public class TastyFoodWebApplication implements CommandLineRunner {
 		shopOwnerService.addProduct("Barbecue salad", "Delicious dish", "/images/plate1.png", 22d);
 		shopOwnerService.addProduct("Salad with fish", "Delicious dish", "/images/plate2.png", 12d);
 		shopOwnerService.addProduct("Spinach salad", "Delicious dish", "/images/plate3.png", 9.5d);
+//		shopOwnerService.addProduct("Caridea Prawn Lobster Crab Seafood", "Delicious dish", "/images/plate4.png", 50d);
+//		shopOwnerService.addProduct("Roast chicken Barbecue", "Delicious dish", "/images/plate5.png", 25d);
 	}
 }
