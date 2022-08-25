@@ -18,7 +18,7 @@ public class Cart {
     private List<CartItem> cartItems;
 //    @OneToOne
 //    @MapsId
-//    private User user;
+//    private User userBinding;
 
     public Cart() {}
 

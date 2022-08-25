@@ -1,12 +1,10 @@
 package com.tastyfoodwebapplication.enums;
 
-import com.tastyfoodwebapplication.services.OrderService;
-
 public enum OrderStatus {
-    Cancelled,
     Pending,
     Preparing,
     Delivering,
+    Cancelled,
     Delivered;
 
     public boolean isInProgress() {

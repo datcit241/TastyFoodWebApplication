@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head th:replace="/fragments/header :: head"></head>
+
+<body>
+<div th:replace="/fragments/header :: header"></div>
+
+<section class="contact">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 consult">
+                <div class="content">
+                    <p class="sub-title">Let's talk</p>
+                    <h2>Contact us</h2>
+                    <p>If you want to reserve a table in our restaurant, contact us and we will attend you quickly, with
+                        our 24/7 chat service.</p>
+                </div>
+            </div>
+            <div class="col-md-6 consult">
+                <div class="consult-form">
+                    <form method="post" th:action="@{/customer-support/send}" th:object="${message}">
+                        <input th:field="*{name}" type="text" placeholder="Your name" class="form-control"><br>
+                        <div class="alert alert-warning" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+
+                        <input th:field="*{email}" type="email" placeholder="Your email" class="form-control"><br>
+                        <div class="alert alert-warning" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+
+                        <input th:field="*{phoneNumber}" type="tel" placeholder="Your telephone number"
+                               class="form-control"><br>
+                        <div class="alert alert-warning" th:if="${#fields.hasErrors('phoneNumber')}"
+                             th:errors="*{phoneNumber}"></div>
+
+                        <textarea th:field="*{content}" placeholder="Content" class="form-control"
+                                  rows="3"></textarea><br>
+                        <div class="alert alert-warning" th:if="${#fields.hasErrors('content')}"
+                             th:errors="*{content}"></div>
+
+                        <button type="submit" class="btn btn-success">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:replace="/fragments/footer :: footer"></div>
+
+</body>
+</html>

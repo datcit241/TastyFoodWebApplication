@@ -117,7 +117,7 @@
                                         <fieldset>
 
                                             <h2>Sign in</h2>
-                                            <span>or <a href="#" class="sign-up">Create Account</a></span>
+                                            <span>or <a th:href="@{/registration}" class="sign-up">Create Account</a></span>
 
                                             <div th:if="${param.error}">
                                                 <div class="alert alert-danger">

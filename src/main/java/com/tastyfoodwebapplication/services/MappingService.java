@@ -5,7 +5,6 @@ import com.tastyfoodwebapplication.models.User;
 import com.tastyfoodwebapplication.models.bindings.UserBinding;
 import com.tastyfoodwebapplication.utilities.PasswordAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +23,7 @@ public class MappingService {
 
     public User bindUser(UserBinding userBinding) {
         String hashedPassword = passwordEncoder.encode(userBinding.getPassword());
-        User user = new User(userBinding.getUsername(), userBinding.getName(), hashedPassword, userBinding.getAddress(), userBinding.getPhoneNumber(), UserRole.User);
+        User user = new User(userBinding.getUsername(), userBinding.getName(), hashedPassword, userBinding.getAddress(), userBinding.getEmail(), userBinding.getPhoneNumber(), UserRole.User);
         return user;
     }
 

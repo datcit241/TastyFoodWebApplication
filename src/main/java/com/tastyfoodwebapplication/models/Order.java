@@ -21,12 +21,14 @@ public class Order {
     private List<CartItem> cartItems;
     private OrderStatus status;
     private LocalDateTime orderedAt;
+    private double totalPrice;
 
     public Order() {}
 
-    public Order(User user, List<CartItem> cartItems, LocalDateTime orderedAt) {
+    public Order(User user, List<CartItem> cartItems, double totalPrice, LocalDateTime orderedAt) {
         this.user = user;
         this.cartItems = cartItems;
+        this.totalPrice = totalPrice;
         this.orderedAt = orderedAt;
         this.status = OrderStatus.Pending;
     }

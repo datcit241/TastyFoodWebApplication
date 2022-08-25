@@ -5,6 +5,7 @@ import org.hibernate.annotations.*;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
+import javax.validation.constraints.Min;
 import java.util.*;
 
 @Entity
@@ -16,6 +17,7 @@ public class CartItem {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+    @Min(1)
     private int quantity;
     @OneToMany
     private Set<DetailedProductCategory> selectedCategories;
@@ -29,6 +31,8 @@ public class CartItem {
     }
 
     public String getId() { return id; }
+
+    public void setId(String id) { this.id = id; }
 
     public Product getProduct() { return product; }
 

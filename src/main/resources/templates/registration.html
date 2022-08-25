@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head th:replace="/fragments/header :: head"></head>
+<body>
+<div th:replace="/fragments/header :: header"></div>
+
+<div class="container" style="margin-top:100px;">
+    <div class="m-auto" style="width:fit-content"><h1>Register</h1></div>
+
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-md-4">
+<!--            <form id="registerForm" method="post" th:href="@{/registration}" th:object="${userBinding}">-->
+                <h3 style="text-align: center;">Create a new account</h3>
+                <hr/>
+                <div class="alert alert-warning" th:if="${successful} != null" >Registered successfully</div>
+                <div th:unless="${successful} != null" class="consult-form">
+                    <form method="post" th:action="@{/registration}" th:object="${userBinding}">
+                        <input th:field="*{name}" type="text" placeholder="Your name" class="form-control"><br>
+                        <div class="alert alert-warning" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+
+                        <input th:field="*{username}" type="text" placeholder="Username" class="form-control"><br>
+                        <div class="alert alert-warning" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+
+                        <input th:field="*{password}" type="password" placeholder="Password" class="form-control"><br>
+                        <div class="alert alert-warning" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+
+                        <input th:field="*{retypedPassword}" type="password" placeholder="Re-type password" class="form-control"><br>
+                        <div class="alert alert-warning" th:if="${#fields.hasErrors('retypedPassword')}" th:errors="*{retypedPassword}"></div>
+
+                        <input th:field="*{email}" type="email" placeholder="Your email" class="form-control"><br>
+                        <div class="alert alert-warning" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+
+                        <input th:field="*{address}" type="text" placeholder="Your address" class="form-control"><br>
+                        <div class="alert alert-warning" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
+
+                        <input th:field="*{phoneNumber}" type="tel" placeholder="Your telephone number" class="form-control"><br>
+                        <div class="alert alert-warning" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
+
+                        <button type="submit" class="btn btn-success">Register</button>
+                    </form>
+                </div>
+<!--&lt;!&ndash;                <div asp-validation-summary="ModelOnly" class="text-danger"></div>&ndash;&gt;-->
+<!--                <div class="form-floating">-->
+<!--&lt;!&ndash;                    <label th:for="*{name}">Name</label>&ndash;&gt;-->
+<!--                    <input th:field="*{name}" class="form-control" type="text" autocomplete="name" aria-required="true" placeholder="Name"/>-->
+<!--                    <div class="alert alert-warning" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>-->
+<!--                </div>-->
+<!--                <div class="form-floating">-->
+<!--&lt;!&ndash;                    <label th:for="*{username}">Username</label>&ndash;&gt;-->
+<!--                    <input th:field="*{username}" class="form-control" type="text" autocomplete="username" aria-required="true" placeholder="Username"/>-->
+<!--                    <div class="alert alert-warning" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>-->
+<!--                </div>-->
+<!--                <div class="form-floating">-->
+<!--&lt;!&ndash;                    <label th:for="*{password}">Password</label>&ndash;&gt;-->
+<!--                    <input th:field="*{password}" class="form-control" type="password" autocomplete="password" aria-required="true" />-->
+<!--                    <div class="alert alert-warning" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>-->
+<!--                </div>-->
+<!--                <div class="form-floating">-->
+<!--&lt;!&ndash;                    <label th:for="*{retypedPassword}">Re-type password</label>&ndash;&gt;-->
+<!--                    <input th:field="*{retypedPassword}" class="form-control" type="password" autocomplete="retype-password" aria-required="true" />-->
+<!--                    <div class="alert alert-warning" th:if="${#fields.hasErrors('retypedPassword')}" th:errors="*{retypedPassword}"></div>-->
+<!--                </div>-->
+<!--                <div class="form-floating">-->
+<!--&lt;!&ndash;                    <label th:for="*{email}">Email</label>&ndash;&gt;-->
+<!--                    <input th:field="*{email}" class="form-control" type="email" autocomplete="email" aria-required="true" />-->
+<!--                    <div class="alert alert-warning" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>-->
+<!--                </div>-->
+<!--                <div class="form-floating">-->
+<!--&lt;!&ndash;                    <label th:for="*{address}">Address</label>&ndash;&gt;-->
+<!--                    <input th:field="*{address}" class="form-control" type="text" autocomplete="address" aria-required="true" />-->
+<!--                    <div class="alert alert-warning" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>-->
+<!--                </div>-->
+<!--                <div class="form-floating">-->
+<!--&lt;!&ndash;                    <label th:for="*{phoneNumber}">Phone number</label>&ndash;&gt;-->
+<!--                    <input th:field="*{phoneNumber}" class="form-control" type="tel" autocomplete="phone-ber" aria-required="true" />-->
+<!--                    <div class="alert alert-warning" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>-->
+<!--                </div>-->
+<!--                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>-->
+<!--            </form>-->
+        </div>
+        <div class="col"></div>
+    </div>
+
+</div>
+
+<div th:replace="/fragments/footer :: footer"></div>
+
+</body>
+</html>

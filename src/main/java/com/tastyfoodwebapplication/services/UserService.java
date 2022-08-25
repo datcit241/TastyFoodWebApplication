@@ -24,6 +24,7 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
     private CartRepository cartRepository;
     private CartItemRepository cartItemRepository;
+    private OrderHistoryRepository orderHistoryRepository;
     private OrderRepository orderRepository;
     private ProductRepository productRepository;
     private MappingService mappingService;
@@ -32,10 +33,11 @@ public class UserService implements UserDetailsService {
     public UserService() {};
 
     @Autowired
-    public UserService(UserRepository userRepository, CartRepository cartRepository, CartItemRepository cartItemRepository, OrderRepository orderRepository, ProductRepository productRepository, MappingService mappingService, PasswordAuthentication passwordAuthentication) {
+    public UserService(UserRepository userRepository, CartRepository cartRepository, CartItemRepository cartItemRepository, OrderHistoryRepository orderHistoryRepository, OrderRepository orderRepository, ProductRepository productRepository, MappingService mappingService, PasswordAuthentication passwordAuthentication) {
         this.userRepository = userRepository;
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
+        this.orderHistoryRepository = orderHistoryRepository;
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
         this.mappingService = mappingService;
@@ -43,7 +45,7 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean addUser(UserBinding userBinding) {
-        if (userRepository.findById(userBinding.getUsername()).isPresent()) {
+        if (new SearchHelper<User>(userRepository.findAll()).find(user -> user.getUsername().equals(userBinding.getUsername())) != null) {
             return false;
         }
 
@@ -52,6 +54,9 @@ public class UserService implements UserDetailsService {
 
         Cart cart =  new Cart(user.getId());
         this.cartRepository.save(cart);
+
+        OrderHistory orderHistory = new OrderHistory(user.getId());
+        this.orderHistoryRepository.save(orderHistory);
 
         return true;
     }
@@ -103,14 +108,28 @@ public class UserService implements UserDetailsService {
         return size - 1 == cartItems.size();
     }
 
-    public void order(User user, List<CartItem> cartItems) {
-        Order order = new Order(user, cartItems, LocalDateTime.now());
+    public void takeOrder(User user, List<CartItem> cartItems) {
+        double totalPrice = 0d;
 
-        Cart cart = getCart(user);
+        for (CartItem cartItem : cartItems) {
+            totalPrice += cartItem.getQuantity() * (cartItem.getProduct().getPrice() * cartItem.getProduct().getDiscount());
+
+            if (cartItem.getSelectedCategories().size() != 0) {
+                for (DetailedProductCategory e : cartItem.getSelectedCategories()) {
+                    totalPrice += e.getCharge();
+                }
+            }
+        }
+
+        Order order = new Order(user, cartItems, totalPrice, LocalDateTime.now());
+        OrderHistory orderHistory = orderHistoryRepository.findById(user.getId()).get();
+        orderHistory.addOrder(order);
+
+        Cart cart = cartRepository.findById(user.getId()).get();
         cart.getCartItems().removeAll(cartItems);
 
         cartRepository.save(cart);
-        orderRepository.save(order);
+        orderHistoryRepository.save(orderHistory);
     }
 
     public List<Order> getOrders(User user) {

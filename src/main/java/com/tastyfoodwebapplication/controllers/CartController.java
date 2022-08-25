@@ -12,6 +12,7 @@ import org.springframework.ui.*;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.*;
 
 @Controller
@@ -56,12 +57,14 @@ public class CartController {
     }
 
     @RequestMapping(value = "/cart/update-cart-items")
-    public String updateCart(@ModelAttribute Cart bindingCart, BindingResult bindingResult, Authentication authentication) {
-        User user = userService.getLoggedInUser(authentication);
-        Cart userCart = userService.getCart(user);
+    public String updateCart(@Valid @ModelAttribute Cart cart, BindingResult bindingResult, Authentication authentication) {
+        if (cart.getCartItems() != null) {
+            User user = userService.getLoggedInUser(authentication);
+            Cart userCart = userService.getCart(user);
 
-        bindingCart.getCartItems().forEach(cartItem -> new SearchHelper<CartItem>(userCart.getCartItems()).find(cartItem1 -> cartItem1.getId().equals(cartItem.getId())).setQuantity(cartItem.getQuantity()));
-        cartRepository.save(userCart);
+            cart.getCartItems().forEach(cartItem -> new SearchHelper<CartItem>(userCart.getCartItems()).find(cartItem1 -> cartItem1.getId().equals(cartItem.getId())).setQuantity(cartItem.getQuantity()));
+            cartRepository.save(userCart);
+        }
 
         return "redirect:/cart";
     }

@@ -8,9 +8,11 @@
     #cartTable {
         margin-inline: auto;
     }
+
     .cart-item-list td:not(.cart-item-list td.img-container) {
         padding-inline: 20px;
     }
+
     #total-price {
         margin-inline: auto;
         margin-top: 40px;
@@ -32,7 +34,7 @@
         <div class="">
             <table id="cartTable">
                 <tbody>
-                <tr th:each="cartItem, itemStat : ${cart.getCartItems()}" id="${e.productId}">
+                <tr th:each="cartItem, itemStat : ${cart.cartItems}" id="${e.productId}">
                     <td class="img-container">
                         <div class="w-50 mx-auto">
                             <img th:src="${cartItem.product.imageURL}"
@@ -43,12 +45,13 @@
                         <h3 th:text="${cartItem.product.name}" class="m-0"></h3>
                     </td>
                     <td class="align-middle">
-                        <!--                    th:field="*{cartItems[__${itemStat.index}__].id}"-->
-<!--                        <input th:name="|cartItems[${itemStat.index}].id|" th:value="${cartItem.id}">-->
+                        <!--                                            th:field="*{cartItems[__${itemStat.index}__].id}"-->
+                        <input hidden th:value="${cartItem.id}" th:name="|cartItems[${itemStat.index}].id|" type="text">
                         <!--                         th:field="*{cartItems[__${itemStat.index}__].quantity}"-->
                         <input th:value="${cartItem.quantity}" th:name="|cartItems[${itemStat.index}].quantity|"
                                onchange="calculate(this)" th:class="quantity" th:attr="data-id=${cartItem.id}"
-                               type="number" min="1" class="form-control" aria-describedby="basic-addon1" style="max-width: 100px">
+                               type="number" min="1" class="form-control" aria-describedby="basic-addon1"
+                               style="max-width: 100px">
                     </td>
                     <td th:class="price" th:attr="data-id=${cartItem.id}"
                         th:text="${#numbers.formatCurrency(cartItem.product.price)}" class="align-middle">
@@ -67,12 +70,13 @@
                 </tr>
                 </tbody>
             </table>
-<!--            <div class="row">-->
-                <div class="col-md-5 t-2" id="total-price">Total: $</div>
-<!--            </div>-->
+            <!--            <div class="row">-->
+            <div class="col-md-5 t-2" id="total-price">Total: $</div>
+            <!--            </div>-->
+            <div class="alert alert-danger" th:if="${error} != null" th:text="${error}"></div>
         </div>
         <div class="d-flex flex-row-reverse" style="justify-content: center;">
-            <a class="btn btn-success ms-2" href="/order/">
+            <a class="btn btn-success ms-2" th:href="@{/order}">
                 <span class="fw-bold fs-6">Order</span>
             </a>
             <a class="btn btn-success ms-2" href="/home/menu">
@@ -97,9 +101,11 @@
     }
 
     function sum() {
-        let sum = Array.from($(".final-price").map(function () {
+        let prices = Array.from($(".final-price").map(function () {
             return parseFloat($(this).text().replace('$', ''));
-        })).reduce((total, price) => total + price);
+        }));
+
+        let sum = (!prices.length ? 0 : prices.reduce((total, price) => total + price));
 
         $("#total-price").text("Total: $" + sum);
     }

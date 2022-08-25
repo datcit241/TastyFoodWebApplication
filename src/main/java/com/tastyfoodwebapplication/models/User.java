@@ -21,6 +21,7 @@ public class User implements UserDetails {
     private String name;
     private String hashedPassword;
     private String address;
+    private String email;
     private String phoneNumber;
     private UserRole role;
     private UserStatus status;
@@ -30,16 +31,18 @@ public class User implements UserDetails {
 
     public User() {}
 
-    public User(String username, String name, String hashedPassword, String address, String phoneNumber, UserRole role) {
+    public User(String username, String name, String hashedPassword, String address, String email, String phoneNumber, UserRole role) {
         this.username = username;
         this.name = name;
         this.hashedPassword = hashedPassword;
         this.address = address;
+        this.email = email;
         this.phoneNumber = phoneNumber;
         this.role = role;
         this.status = UserStatus.Active;
     }
 
+    public void setId(String id) { this.id = id; }
     public String getId() { return id; }
 
     @Override
@@ -82,6 +85,9 @@ public class User implements UserDetails {
     public String getHashedPassword() { return hashedPassword; }
     public void setHashedPassword(String hashedPassword) { this.hashedPassword = hashedPassword; }
 
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
 
@@ -106,4 +112,5 @@ public class User implements UserDetails {
     public int hashCode() {
         return Objects.hash(username);
     }
+
 }

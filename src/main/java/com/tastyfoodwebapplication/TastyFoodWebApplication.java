@@ -13,8 +13,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.Optional;
-
 @SpringBootApplication
 public class TastyFoodWebApplication implements CommandLineRunner {
 	private ShopOwnerService shopOwnerService;
@@ -37,8 +35,8 @@ public class TastyFoodWebApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		userService.addUser(new UserBinding("username", "password", "Dat", "BD", "113"));
-		userService.addUser(new UserBinding("admin", "admin", "Dat", "BD", "113"));
+		userService.addUser(new UserBinding("Dat", "username", "password", "", "dat@mail", "BD", "113"));
+		userService.addUser(new UserBinding("Dat", "admin", "admin", "", "admin@tasty.vn", "BD", "113"));
 		System.out.println(userRepository.count());
 
 		User user = new SearchHelper<User>(userRepository.findAll()).find(anyUser -> anyUser.getUsername().equals("username"));
