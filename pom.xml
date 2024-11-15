@@ -11,11 +11,11 @@
 	<groupId>com</groupId>
 	<artifactId>TastyFoodWebApplication</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>TastyFoodWebApplication</name>
 	<description>TastyFoodWebApplication</description>
 	<properties>
-		<java.version>18</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
